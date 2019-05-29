@@ -1,6 +1,7 @@
 package com.meowrockweather.android;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.*;
@@ -69,9 +70,9 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { //该方法返回的是Fragment的UI布局
         View view = inflater.inflate(R.layout.choose_area, container, false);
-        titleText = (TextView)view.findViewById(R.id.title_text);
-        backButton = (Button)view.findViewById(R.id.back_button);
-        listView = (ListView)view.findViewById(R.id.list_view);
+        titleText = view.findViewById(R.id.title_text);
+        backButton = view.findViewById(R.id.back_button);
+        listView = view.findViewById(R.id.list_view);
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, dataList); //getContext获取上下文环境 //第一个参数：上下文环境 第二个参数：当前列表项加载的布局文件 第三个参数：数据源
         listView.setAdapter(adapter);  //listview视图加载适配器
         return view;
@@ -89,6 +90,13 @@ public class ChooseAreaFragment extends Fragment {
                 }else if(currentLevel == LEVEL_CITY){
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }
+                else if(currentLevel == LEVEL_COUNTY){
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
